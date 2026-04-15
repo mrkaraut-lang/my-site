@@ -19,6 +19,161 @@
         .delay-200 { animation-delay: 0.2s; }
         .delay-300 { animation-delay: 0.3s; }
 
+        :root {
+            --bg-shift-x: 0px;
+            --bg-shift-y: 0px;
+            --bg-rotate-x: 0deg;
+            --bg-rotate-y: 0deg;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.16), transparent 28%),
+                radial-gradient(circle at 80% 18%, rgba(56, 189, 248, 0.16), transparent 24%),
+                linear-gradient(180deg, #eef2ff 0%, #f8fafc 45%, #e2e8f0 100%);
+            overflow-x: hidden;
+        }
+
+        .page-shell {
+            position: relative;
+            isolation: isolate;
+        }
+
+        .page-shell > *:not(.bg-3d-scene) {
+            position: relative;
+            z-index: 1;
+        }
+
+        .bg-3d-scene {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            perspective: 1400px;
+        }
+
+        .bg-3d-grid,
+        .bg-3d-orb,
+        .bg-3d-ring,
+        .bg-3d-glow {
+            position: absolute;
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 180ms ease-out;
+        }
+
+        .bg-3d-grid {
+            inset: -18%;
+            opacity: 0.45;
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+            background-size: 56px 56px;
+            transform:
+                rotateX(72deg)
+                rotateZ(-18deg)
+                translate3d(calc(var(--bg-shift-x) * -0.16), calc(var(--bg-shift-y) * -0.18), -180px);
+            mask-image: radial-gradient(circle at center, black 34%, transparent 82%);
+        }
+
+        .bg-3d-orb {
+            border-radius: 9999px;
+            filter: blur(6px);
+            opacity: 0.9;
+            box-shadow: 0 30px 90px rgba(79, 70, 229, 0.16);
+        }
+
+        .bg-3d-orb.one {
+            width: 32rem;
+            height: 32rem;
+            top: 8%;
+            left: -6rem;
+            background:
+                radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(129, 140, 248, 0.55) 30%, rgba(79, 70, 229, 0.08) 72%, transparent 78%);
+            transform:
+                translate3d(calc(var(--bg-shift-x) * -0.38), calc(var(--bg-shift-y) * -0.3), 120px)
+                rotateY(var(--bg-rotate-y));
+        }
+
+        .bg-3d-orb.two {
+            width: 26rem;
+            height: 26rem;
+            right: -4rem;
+            top: 22%;
+            background:
+                radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.92), rgba(34, 211, 238, 0.5) 28%, rgba(14, 165, 233, 0.08) 72%, transparent 78%);
+            transform:
+                translate3d(calc(var(--bg-shift-x) * 0.34), calc(var(--bg-shift-y) * -0.22), 40px)
+                rotateX(var(--bg-rotate-x));
+        }
+
+        .bg-3d-ring {
+            width: 38rem;
+            height: 38rem;
+            left: 50%;
+            top: 58%;
+            margin-left: -19rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(99, 102, 241, 0.18);
+            box-shadow:
+                inset 0 0 40px rgba(255, 255, 255, 0.24),
+                0 0 80px rgba(99, 102, 241, 0.08);
+            transform:
+                translate3d(calc(var(--bg-shift-x) * 0.12), calc(var(--bg-shift-y) * 0.18), -40px)
+                rotateX(68deg)
+                rotateY(var(--bg-rotate-y));
+        }
+
+        .bg-3d-glow {
+            width: 48rem;
+            height: 48rem;
+            left: 50%;
+            top: 52%;
+            margin-left: -24rem;
+            border-radius: 9999px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0.04) 35%, transparent 70%);
+            filter: blur(18px);
+            transform:
+                translate3d(calc(var(--bg-shift-x) * 0.08), calc(var(--bg-shift-y) * 0.1), -120px)
+                rotateX(66deg);
+        }
+
+        @media (max-width: 768px) {
+            .bg-3d-grid {
+                inset: -30%;
+                background-size: 34px 34px;
+                opacity: 0.35;
+            }
+
+            .bg-3d-orb.one,
+            .bg-3d-orb.two {
+                width: 18rem;
+                height: 18rem;
+            }
+
+            .bg-3d-ring {
+                width: 24rem;
+                height: 24rem;
+                margin-left: -12rem;
+            }
+
+            .bg-3d-glow {
+                width: 28rem;
+                height: 28rem;
+                margin-left: -14rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-3d-grid,
+            .bg-3d-orb,
+            .bg-3d-ring,
+            .bg-3d-glow {
+                transition: none;
+            }
+        }
+
         /* Toast Notification Styling */
         #toast {
             visibility: hidden;
@@ -44,7 +199,15 @@
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans leading-relaxed">
+<body class="text-slate-800 font-sans leading-relaxed">
+    <div class="page-shell">
+    <div class="bg-3d-scene" aria-hidden="true">
+        <div class="bg-3d-grid"></div>
+        <div class="bg-3d-orb one"></div>
+        <div class="bg-3d-orb two"></div>
+        <div class="bg-3d-ring"></div>
+        <div class="bg-3d-glow"></div>
+    </div>
 
     <!-- Navigation -->
     <nav class="bg-white shadow-md fixed w-full z-50 top-0 left-0">
@@ -320,6 +483,34 @@
     <div id="toast">Message sent successfully!</div>
 
     <script>
+        const root = document.documentElement;
+        const mediaReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        function updateBackgroundMotion(clientX, clientY) {
+            if (mediaReducedMotion.matches) {
+                return;
+            }
+
+            const xRatio = (clientX / window.innerWidth - 0.5) * 2;
+            const yRatio = (clientY / window.innerHeight - 0.5) * 2;
+
+            root.style.setProperty('--bg-shift-x', `${xRatio * 24}px`);
+            root.style.setProperty('--bg-shift-y', `${yRatio * 18}px`);
+            root.style.setProperty('--bg-rotate-x', `${yRatio * -6}deg`);
+            root.style.setProperty('--bg-rotate-y', `${xRatio * 8}deg`);
+        }
+
+        window.addEventListener('mousemove', (event) => {
+            updateBackgroundMotion(event.clientX, event.clientY);
+        });
+
+        window.addEventListener('touchmove', (event) => {
+            const touch = event.touches[0];
+            if (touch) {
+                updateBackgroundMotion(touch.clientX, touch.clientY);
+            }
+        }, { passive: true });
+
         // Mobile Menu Toggle
         const btn = document.getElementById('mobile-menu-btn');
         const menu = document.getElementById('mobile-menu');
@@ -365,6 +556,7 @@
             }, 1000);
         });
     </script>
+    </div>
 </body>
 
 </html>
